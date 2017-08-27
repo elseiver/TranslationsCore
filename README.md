@@ -1,0 +1,2 @@
+# TranslationsCore
+Web Translations API
