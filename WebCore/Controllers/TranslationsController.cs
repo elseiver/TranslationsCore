@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebCore.Models;
+using System.Data.SqlClient;
 
 namespace WebCore.Controllers
 {
@@ -56,8 +57,8 @@ namespace WebCore.Controllers
             }
 
             var translations = await (from t in _context.Translation
-                               where t.Key == key
-                               select t).ToListAsync();
+                                      where t.Key == key
+                                      select t).ToListAsync();
 
             if (translations == null)
             {
@@ -68,16 +69,35 @@ namespace WebCore.Controllers
         }
 
         // GET: api/Translations/culture/5
-        [HttpGet("culture/{cultureId}")]
-        public async Task<IActionResult> GetTranslationsByCultureId([FromRoute] int cultureId)
+        [HttpGet("culture/{culture}/{timestamp}")]
+        public async Task<IActionResult> GetTranslationsByCulture([FromRoute] string culture, [FromRoute] string timestamp)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            int cultureId;
+            if (!int.TryParse(culture, out cultureId))
+            {
+                try
+                {
+                    cultureId = _context.Culture
+                                       .FromSql("SELECT * FROM Culture WHERE Name LIKE @culture", new SqlParameter("@culture", culture))
+                                       .Select(c => c.Id).FirstOrDefault();
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+
+            DateTime ts;
+            DateTime.TryParse(timestamp, out ts);
+
             var translations = await (from t in _context.Translation
                                       where t.CultureId == cultureId
+                                      && (ts == null || t.Modify_DT > ts)
                                       select t).ToListAsync();
 
             if (translations == null)
