@@ -34,6 +34,8 @@ namespace WebCore
 
             services.AddDbContext<WebCoreContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("WebCoreContext")));
+
+            services.Configure<Hosting>(Configuration.GetSection("Hosting"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
