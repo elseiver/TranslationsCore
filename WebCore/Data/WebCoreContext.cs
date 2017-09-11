@@ -13,6 +13,18 @@ namespace WebCore.Models
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Translation>()
+                .Property(b => b.Modify_DT)
+                .HasDefaultValueSql("getutcdate()");
+            modelBuilder.Entity<Culture>()
+                .Property(b => b.Active)
+                .HasDefaultValueSql("(1)");
+            modelBuilder.Entity<Culture>()
+                .Property(b => b.Default)
+                .HasDefaultValueSql("(0)");
+        }
 
         public DbSet<WebCore.Models.Culture> Culture { get; set; }
 

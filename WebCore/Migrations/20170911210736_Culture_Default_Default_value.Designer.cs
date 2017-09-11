@@ -8,9 +8,10 @@ using WebCore.Models;
 namespace WebCore.Migrations
 {
     [DbContext(typeof(WebCoreContext))]
-    partial class WebCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20170911210736_Culture_Default_Default_value")]
+    partial class Culture_Default_Default_value
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -48,9 +49,6 @@ namespace WebCore.Migrations
 
                     b.Property<int>("CultureId");
 
-                    b.Property<string>("CultureName")
-                        .HasMaxLength(20);
-
                     b.Property<string>("Key");
 
                     b.Property<DateTime>("Modify_DT")
@@ -58,7 +56,7 @@ namespace WebCore.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Text")
-                        .HasMaxLength(4000);
+                        .HasMaxLength(1000);
 
                     b.HasKey("Id");
 

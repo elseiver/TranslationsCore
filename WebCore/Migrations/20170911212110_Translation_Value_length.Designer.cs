@@ -8,9 +8,10 @@ using WebCore.Models;
 namespace WebCore.Migrations
 {
     [DbContext(typeof(WebCoreContext))]
-    partial class WebCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20170911212110_Translation_Value_length")]
+    partial class Translation_Value_length
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

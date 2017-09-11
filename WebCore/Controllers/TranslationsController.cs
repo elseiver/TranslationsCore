@@ -102,6 +102,9 @@ namespace WebCore.Controllers
                 return BadRequest();
             }
 
+            translation = FixCultureName(translation);
+            translation.Modify_DT = DateTime.UtcNow;
+
             _context.Entry(translation).State = EntityState.Modified;
 
             try
@@ -131,6 +134,9 @@ namespace WebCore.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            translation = FixCultureName(translation);
+            translation.Modify_DT = DateTime.UtcNow;
 
             _context.Translation.Add(translation);
             await _context.SaveChangesAsync();
@@ -162,6 +168,19 @@ namespace WebCore.Controllers
         private bool TranslationExists(int id)
         {
             return _context.Translation.Any(e => e.Id == id);
+        }
+
+        private Translation FixCultureName(Translation translation)
+        {
+            if (string.IsNullOrEmpty(translation.CultureName))
+            {
+                var culture = _context.Culture.FirstOrDefault(c => c.Id == translation.CultureId);
+                if (culture != null)
+                {
+                    translation.CultureName = culture.Name;
+                }
+            }
+            return translation;
         }
     }
 }
