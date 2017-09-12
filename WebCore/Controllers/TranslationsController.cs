@@ -119,7 +119,7 @@ namespace WebCore.Controllers
             {
                 maxTimestamp = translations.Any(t => t.Modify_DT < DateTime.UtcNow) ? translations.Where(t => t.Modify_DT < DateTime.UtcNow).Max(t => t.Modify_DT) : DateTime.UtcNow;
             }
-            return Ok(new { maxTimestamp = maxTimestamp, translations = translations.Select(t => new { t.Id, t.Key, t.Text }).ToList() });
+            return Ok(new { maxTimestamp = maxTimestamp, translations = translations.Select(t => new { t.Key, t.Text }).ToList() });
         }
 
         // PUT: api/Translations/5
