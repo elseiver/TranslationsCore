@@ -95,6 +95,7 @@ namespace WebCore.Controllers
             try
             {
                 timestamp = timestamp.Replace("\"", "");
+                if (timestamp.EndsWith("Z")) timestamp = timestamp.Substring(0, timestamp.Length - 1);
             }
             catch(Exception ex)
             {
@@ -102,7 +103,8 @@ namespace WebCore.Controllers
             }
 
             DateTime ts;
-            DateTime.TryParse(timestamp, out ts);
+            if (DateTime.TryParse(timestamp, out ts)) ts = ts.ToUniversalTime();
+            
 
             var translations = await (from t in _context.Translation
                                       where t.CultureId == cultureId
