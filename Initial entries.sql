@@ -1,0 +1,21 @@
+﻿INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1, 'Hike time', 'Hike time', 'en-US')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1,'Hike location', 'Hike location', 'en-US')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1,'Hike info', 'Hike info', 'en-US')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1,'Hike difficulty', 'Hike difficulty', 'en-US')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1,'Hike leader', 'Hike leader', 'en-US')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (1,'Notes', 'Notes', 'en-US')
+
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14, 'Hike time',N'Tiempo de caminata', 'es-MX')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14,'Hike location'	,N'Ubicación de la excursión', 'es-MX')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14,'Hike info'	,N'Información de la excursión', 'es-MX')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14,'Hike difficulty'	,N'Dificultad de caminata', 'es-MX')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14,'Hike leader'	,N'Caudillo de excursión', 'es-MX')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (14,'Notes'	,N'Notas', 'es-MX')
+
+
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5, 'Hike time',N'Время похода' , 'ru-RU')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5,'Hike location',N'Место похода' , 'ru-RU')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5,'Hike info'	,N'Информация о походе' , 'ru-RU')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5,'Hike difficulty'	,N'Сложность похода' , 'ru-RU')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5,'Hike leader'	,N'Предводитель похода' , 'ru-RU')
+INSERT INTO Translation (CultureId, [Key], [Text], CultureName) VALUES (5,'Notes'	,N'Заметки' , 'ru-RU')

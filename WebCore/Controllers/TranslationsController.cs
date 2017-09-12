@@ -92,6 +92,15 @@ namespace WebCore.Controllers
                 }
             }
 
+            try
+            {
+                timestamp = timestamp.Replace("\"", "");
+            }
+            catch(Exception ex)
+            {
+
+            }
+
             DateTime ts;
             DateTime.TryParse(timestamp, out ts);
 
@@ -105,7 +114,12 @@ namespace WebCore.Controllers
                 return NotFound();
             }
 
-            return Ok(translations);
+            var maxTimestamp = DateTime.UtcNow;
+            if (translations.Any())
+            {
+                maxTimestamp = translations.Any(t => t.Modify_DT < DateTime.UtcNow) ? translations.Where(t => t.Modify_DT < DateTime.UtcNow).Max(t => t.Modify_DT) : DateTime.UtcNow;
+            }
+            return Ok(new { maxTimestamp = maxTimestamp, translations = translations.Select(t => new { t.Id, t.Key, t.Text }).ToList() });
         }
 
         // PUT: api/Translations/5
