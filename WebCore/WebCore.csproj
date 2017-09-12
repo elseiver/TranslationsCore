@@ -31,4 +31,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="TrieLib">
+      <HintPath>Assembly\TrieLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
