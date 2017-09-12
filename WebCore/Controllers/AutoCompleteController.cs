@@ -60,18 +60,18 @@ namespace WebCore.Controllers
 
             TrieLib.Trie trie = GetTrie(1);
 
-            var suggestionIds = trie.Search(prefix);
+            var suggestionIds = trie.Search(prefix, MaxResults);
 
             var suggestions = await (from t in _context.Translation
-                                     where suggestionIds.Contains(t.Id)
-                                     select t.Text).Take(MaxResults).ToListAsync();
+                                     where suggestionIds.Keys.Contains(t.Id)
+                                     select new { t.Id, t.Text}).ToListAsync();
 
             if (suggestions == null)
             {
                 return NotFound();
             }
 
-            return Ok(suggestions);
+            return Ok(suggestions.OrderBy(s => suggestionIds[s.Id]).Select(s => s.Text));
         }
     }
 }
