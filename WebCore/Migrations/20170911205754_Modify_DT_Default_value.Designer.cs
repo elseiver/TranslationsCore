@@ -8,9 +8,10 @@ using WebCore.Models;
 namespace WebCore.Migrations
 {
     [DbContext(typeof(WebCoreContext))]
-    partial class WebCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20170911205754_Modify_DT_Default_value")]
+    partial class Modify_DT_Default_value
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -21,13 +22,9 @@ namespace WebCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Active")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("(1)");
+                    b.Property<bool>("Active");
 
-                    b.Property<bool>("Default")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("(0)");
+                    b.Property<bool>("Default");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
@@ -48,9 +45,6 @@ namespace WebCore.Migrations
 
                     b.Property<int>("CultureId");
 
-                    b.Property<string>("CultureName")
-                        .HasMaxLength(20);
-
                     b.Property<string>("Key");
 
                     b.Property<DateTime>("Modify_DT")
@@ -58,7 +52,7 @@ namespace WebCore.Migrations
                         .HasDefaultValueSql("getutcdate()");
 
                     b.Property<string>("Text")
-                        .HasMaxLength(4000);
+                        .HasMaxLength(1000);
 
                     b.HasKey("Id");
 

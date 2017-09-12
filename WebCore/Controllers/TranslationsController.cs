@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebCore.Models;
+using System.Data.SqlClient;
 
 namespace WebCore.Controllers
 {
@@ -56,8 +57,8 @@ namespace WebCore.Controllers
             }
 
             var translations = await (from t in _context.Translation
-                               where t.Key == key
-                               select t).ToListAsync();
+                                      where t.Key == key
+                                      select t).ToListAsync();
 
             if (translations == null)
             {
@@ -68,16 +69,44 @@ namespace WebCore.Controllers
         }
 
         // GET: api/Translations/culture/5
-        [HttpGet("culture/{cultureId}")]
-        public async Task<IActionResult> GetTranslationsByCultureId([FromRoute] int cultureId)
+        [HttpGet("culture/{culture}/{timestamp}")]
+        public async Task<IActionResult> GetTranslationsByCulture([FromRoute] string culture, [FromRoute] string timestamp)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            int cultureId;
+            if (!int.TryParse(culture, out cultureId))
+            {
+                try
+                {
+                    cultureId = _context.Culture
+                                       .FromSql("SELECT * FROM Culture WHERE Name LIKE @culture", new SqlParameter("@culture", culture))
+                                       .Select(c => c.Id).FirstOrDefault();
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+
+            try
+            {
+                timestamp = timestamp.Replace("\"", "");
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            DateTime ts;
+            DateTime.TryParse(timestamp, out ts);
+
             var translations = await (from t in _context.Translation
                                       where t.CultureId == cultureId
+                                      && (ts == null || t.Modify_DT > ts)
                                       select t).ToListAsync();
 
             if (translations == null)
@@ -85,7 +114,12 @@ namespace WebCore.Controllers
                 return NotFound();
             }
 
-            return Ok(translations);
+            var maxTimestamp = DateTime.UtcNow;
+            if (translations.Any())
+            {
+                maxTimestamp = translations.Any(t => t.Modify_DT < DateTime.UtcNow) ? translations.Where(t => t.Modify_DT < DateTime.UtcNow).Max(t => t.Modify_DT) : DateTime.UtcNow;
+            }
+            return Ok(new { maxTimestamp = maxTimestamp, translations = translations.Select(t => new { t.Id, t.Key, t.Text }).ToList() });
         }
 
         // PUT: api/Translations/5
@@ -101,6 +135,9 @@ namespace WebCore.Controllers
             {
                 return BadRequest();
             }
+
+            translation = FixCultureName(translation);
+            translation.Modify_DT = DateTime.UtcNow;
 
             _context.Entry(translation).State = EntityState.Modified;
 
@@ -132,6 +169,9 @@ namespace WebCore.Controllers
                 return BadRequest(ModelState);
             }
 
+            translation = FixCultureName(translation);
+            translation.Modify_DT = DateTime.UtcNow;
+
             _context.Translation.Add(translation);
             await _context.SaveChangesAsync();
 
@@ -162,6 +202,19 @@ namespace WebCore.Controllers
         private bool TranslationExists(int id)
         {
             return _context.Translation.Any(e => e.Id == id);
+        }
+
+        private Translation FixCultureName(Translation translation)
+        {
+            if (string.IsNullOrEmpty(translation.CultureName))
+            {
+                var culture = _context.Culture.FirstOrDefault(c => c.Id == translation.CultureId);
+                if (culture != null)
+                {
+                    translation.CultureName = culture.Name;
+                }
+            }
+            return translation;
         }
     }
 }
